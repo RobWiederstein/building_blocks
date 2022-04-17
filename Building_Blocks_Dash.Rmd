@@ -44,99 +44,12 @@ providers <- readRDS("./sda_providers.rds")
 
 ## Inputs {data-width=350 .sidebar}
 
+
 ## Map
 
 ### Indiana
 
-# Inline 1
-
-```{r overview-sidebar-inputs}
-
-shinyApp(
-	ui <- fillPage(
-	padding = 10,
-	fillRow(flex = c(1, 5),
-		fillCol(
-		inputPanel(
-			h6("Choose Geography:"), 
-			selectInput(
-				inputId = "geo",
-				label = NULL,
-				choices = list(
-					Districts = list(
-						Counties = "counties",
-						Schools = "schools",
-						Providers = "providers"
-					)
-				),
-				multiple = F
-			),
-			h6("Choose Variable:"),
-			selectInput(
-				inputId = "variable",
-				label = NULL,
-				choices = NULL,
-				multiple = F
-			)
-		)
-		),
-		fillCol(
-			leafletOutput("map", height = 600),
-		)
-	)
-),
-server = function(input, output) {
-	df <- reactive({
-		get(input$geo)
-	})
-	observeEvent(df(), {
-		choices <- df() |> colnames() |> as.list() |> dput()
-		updateSelectInput(inputId = "variable", choices = choices)
-	})
-	col <- reactive({
-		df() |> 
-			dplyr::select(input$variable)
-	})
-	output$head_df <- renderPrint({
-		col()
-	})
-	output$map <- renderLeaflet({
-		leaflet() |> 
-			setView(-86.45713546504423, 38.56421435890006, zoom = 9) |>
-			#base groups
-			addProviderTiles("CartoDB.Positron")
-	})
-}
-)
-```
-
-# Inline 2
-
-```{r worldphones}
-shinyApp(
-  ui = fillPage(
-    fillCol(flex = c(NA, 1), 
-      inputPanel(
-        selectInput("region", "Region:", choices = colnames(WorldPhones))
-      ),
-      plotOutput("phonePlot", height = "100%")
-    )
-  ),
-  server = function(input, output) {
-    output$phonePlot <- renderPlot({
-      barplot(WorldPhones[,input$region]*1000, 
-              ylab = "Number of Telephones", xlab = "Year")
-    })
-  },
-  options = list(height = 600)
-)
-```
-
-```{r main-map, eval = F, include = F}
-#Read in
-counties <- readRDS("./in_counties.rds")
-schools <- readRDS("./in_school_dist.rds")
-providers <- readRDS("./sda_providers.rds")
+```{r main-map, eval = T, include = T}
 #color <- c("#1B9E77", "#D95F02", "#7570B3", "#E7298A", "#66A61E")
 factpal <- leaflet::colorFactor(topo.colors(5), providers$provider)
 # map
@@ -159,7 +72,7 @@ leaflet() %>%
 		data = schools,
 		popup = leafpop::popupTable(
 			schools,
-			zcol = c(4, 14:25),
+			#zcol = c(4, 14:25),
 			row.numbers = F
 			),
 		fillOpacity = .2,
@@ -188,27 +101,6 @@ leaflet() %>%
 	# hide
 	hideGroup(c("Counties", "Schools", "Providers"))
 
-```
-
-
-
-
-
-
-# leaflet map
-
-```{r new-map}
-shinyApp(
-	ui = leafletOutput("plot1", height = 600), 
-	server = function(input, output) {
-	output$plot1 <- renderPlot({
-		mtcars |> 
-			ggplot() +
-			aes(hp, mpg) + 
-			geom_point()
-	})
-	}
-)
 ```
 
 # Schools
@@ -254,16 +146,16 @@ output$enrollments_pre_k <- renderHighchart({
 
 ### Reading
 
-```{r reading-scores, eval=F, include=F}
+```{r reading-scores, eval=T, include=T}
 iread3_scores <- readRDS("./iread3_scores.rds")
-highchartOutput("reading_scores")
-
-output$reading_scores <- renderHighchart({
+#filter
+data = iread3_scores[grep("Warrick|Vanderburgh|Posey", iread3_scores$corp_name), ]
+renderHighchart({
 	hchart(
-	iread3_scores,
+	data,
 	"bar",
-	hcaes(x = race,
-	      y = value,
+	hcaes(x = corp_name,
+	      y = iread_pass_percent,
 	      group = corp_name)
 ) |>
 	hc_xAxis(title = "") |> 
