@@ -1,0 +1,77 @@
+---
+title: "Demo"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+runtime: shiny
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+library(shiny)
+library(leaflet)
+```
+
+Column {data-width=650}
+-----------------------------------------------------------------------
+
+
+### Leaflet Map Inline -- Height constrained
+
+```{r inline-leaflet-map}
+shinyApp(
+	ui = leafletOutput("map", height = 800),
+	#ui = leafletOutput("map", height = "100%")
+	server = function(input, output){
+		output$map <- renderLeaflet({
+			leaflet() |> 
+	setView(-86.457, 38.564, zoom = 9) |>
+	addTiles()
+		})
+	}
+)
+```
+
+Column {data-width=350}
+-----------------------------------------------------------------------
+
+### Inline World Phones -- "Error: figure margins too large"
+
+```{r inline-world-phones}
+shinyApp(
+  ui = fillPage(
+    fillCol(flex = c(NA, 1), 
+      inputPanel(
+        selectInput("region", "Region:", choices = colnames(WorldPhones))
+      ),
+      plotOutput("phonePlot", height = "100%")
+    )
+  ),
+  server = function(input, output) {
+    output$phonePlot <- renderPlot({
+      barplot(WorldPhones[,input$region]*1000, 
+              ylab = "Number of Telephones", xlab = "Year")
+    })
+  },
+  options = list(height = 600)
+)
+```
+
+### Fill Layout -- This works
+
+
+```{r fill-layout-worldphones}
+fillCol(height = 600, flex = c(NA, 1), 
+  inputPanel(
+    selectInput("region", "Region:", choices = colnames(WorldPhones))
+  ),
+  plotOutput("phonePlot", height = "100%")
+)
+
+output$phonePlot <- renderPlot({
+  barplot(WorldPhones[,input$region]*1000, 
+          ylab = "Number of Telephones", xlab = "Year")
+})
+```
+
