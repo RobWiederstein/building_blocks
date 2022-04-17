@@ -12,7 +12,7 @@ output:
       code_font:
         google: JetBrains Mono
     orientation: column
-runtime: shiny
+#runtime: shiny
 ---
 
 ```{r setup, include=FALSE}
