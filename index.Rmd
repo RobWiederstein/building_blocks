@@ -12,7 +12,9 @@ output:
       code_font:
         google: JetBrains Mono
     orientation: column
-runtime: shiny
+    social: menu
+    source_code: embed
+#runtime: shiny
 ---
 
 ```{r setup, include=FALSE}
@@ -43,6 +45,23 @@ providers <- readRDS("./sda_providers.rds")
 # Overview
 
 ## Inputs {data-width=350 .sidebar}
+
+<h5>Mission</h5>
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
+
+<h5>Organization</h5>
+
+Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+<h5>Kids</h5>
+
+Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+<h5>Some Links </h5>
+
+- [google](https://www.google.com)
+- [our website](https://www.buildingblocks.net)
 
 
 ## Map
@@ -104,6 +123,14 @@ leaflet() %>%
 ```
 
 # Schools
+
+## Inputs {data-width=350 .sidebar}
+
+<h5>Schools </h5>
+
+Schools are our partners. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+
 
 ## chart {.tabset}
 
